@@ -1,4 +1,4 @@
-module fullfetch
+module github.com/Buct0r/fullfetch
 
 go 1.24.2
 

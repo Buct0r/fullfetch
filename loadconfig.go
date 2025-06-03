@@ -18,7 +18,7 @@ type Config struct {
 func loadConfig() {
 	file, err := os.Open(getConfigPath())
 	if err != nil {
-		fmt.Println("Error opening config file:", err)
+		fmt.Println("Error opening config file")
 	}
 	defer file.Close()
 
@@ -36,10 +36,12 @@ func loadConfig() {
 		"hostname": func(color string, reset string) { displayHostname(color, reset) },
 		"kernel":   func(color string, reset string) { displayKernel(color, reset) },
 		"uptime":   func(color string, reset string) { displayUptime(color, reset) },
+		"bootime":  func(color string, reset string) { displayBootTime(color, reset) },
 		"procs":    func(color string, reset string) { displayProcs(color, reset) },
 		"cpu":      func(color string, reset string) { displayCpu(color, reset) },
 		"gpu":      func(color string, reset string) { displayGpu(color, reset) },
 		"memory":   func(color string, reset string) { displayMemory(color, reset) },
+		"swap":     func(color string, reset string) { displaySwap(color, reset) },
 		"disk":     func(color string, reset string) { displayDisk(color, reset) },
 		"ip":       func(color string, reset string) { displayNetwork(color, reset) },
 		"colors":   printAnsiColors,

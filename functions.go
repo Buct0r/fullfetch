@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/distatus/battery"
 	"github.com/shirou/gopsutil/v4/cpu"
@@ -19,11 +20,20 @@ import (
 )
 
 func getConfigPath() string {
-	// Controlla nella directory locale
-	if _, err := os.Stat("config.json"); err == nil {
-		return "config.json"
+	exePath, err := os.Executable()
+	if err == nil {
+		exeDir := filepath.Dir(exePath)
+		configPath := filepath.Join(exeDir, "config.json")
+		if _, err := os.Stat(configPath); err == nil {
+			return configPath
+		}
+	} // copilot cooked this two functions, I have to admit it
+	if cwd, err := os.Getwd(); err == nil {
+		configPath := filepath.Join(cwd, "config.json")
+		if _, err := os.Stat(configPath); err == nil {
+			return configPath
+		}
 	}
-	// Windows: controlla in %APPDATA%\fullfetch\config.json
 	if runtime.GOOS == "windows" {
 		appdata := os.Getenv("APPDATA")
 		if appdata != "" {
@@ -33,7 +43,6 @@ func getConfigPath() string {
 			}
 		}
 	}
-	// Linux: controlla in ~/.config/fullfetch/config.json
 	if runtime.GOOS == "linux" {
 		usr, err := user.Current()
 		if err == nil {
@@ -43,8 +52,8 @@ func getConfigPath() string {
 			}
 		}
 	}
-	// Fallback
-	return "config.json"
+	// Not found anywhere
+	return ""
 }
 
 func showTitle(color string, reset string) {
@@ -131,16 +140,15 @@ func displayUptime(color string, reset string) {
 	info, _ := host.Info()
 	uptime := info.Uptime
 	if uptime >= 3600 {
-		hours := float64(uptime / 3600)
-		sub := uptime / 3600
-		minutes := (hours - float64(sub)) * 60
+		hours := uptime / 3600
+		minutes := (uptime % 3600) / 60
 		if minutes != 0 {
-			fmt.Printf("%sUptime:%s %v hours %v minutes\n", color, reset, hours, minutes)
+			fmt.Printf("%sUptime:%s %d hours %d mins\n", color, reset, hours, minutes)
 		} else {
-			fmt.Printf("%sUptime:%s %v hours\n", color, reset, hours)
+			fmt.Printf("%sUptime:%s %d hours\n", color, reset, hours)
 		}
 	} else {
-		fmt.Printf("%sUptime:%s %v mins\n", color, reset, uptime/60)
+		fmt.Printf("%sUptime:%s %d mins\n", color, reset, uptime/60)
 	}
 }
 
@@ -149,7 +157,8 @@ func displayCpu(color string, reset string) {
 	model := cpuInfo[0].ModelName
 	numCores, _ := cpu.Counts(false)
 	GHZ := float64(cpuInfo[0].Mhz) / 1000
-	fmt.Printf("%sCPU:%s (%v) %v @ %.2fGHz\n", color, reset, numCores, model, GHZ)
+	//usage, _ := cpu.Percent(time.Second, false)  <-- makes the program run too slowly
+	fmt.Printf("%sCPU:%s (%v) %v @ %.2fGHz\n", color, reset, numCores, model, GHZ) //usage[0]
 }
 
 func displayGpu(color string, reset string) {
@@ -185,7 +194,34 @@ func displayGpu(color string, reset string) {
 
 func displayMemory(color string, reset string) {
 	out, _ := mem.VirtualMemory()
-	fmt.Printf("%sMemory:%s %vMB / %vMB\n", color, reset, out.Used/1e6, out.Total/1e6)
+	used := out.Used / 1e6
+	total := out.Total / 1e6
+	percent := (used * 100) / total
+	var color2 string
+	if percent >= 50 && percent < 90 {
+		color2 = "\033[33m"
+	} else if percent >= 90 {
+		color2 = "\033[31m"
+	} else {
+		color2 = "\033[32m"
+	}
+	fmt.Printf("%sMemory:%s %vMB / %vMB (%s%v%%%s)\n", color, reset, used, total, color2, int64(percent), reset)
+}
+
+func displaySwap(color string, reset string) {
+	out, _ := mem.SwapMemory()
+	used := out.Used / 1024 / 1024
+	total := out.Total / 1024 / 1024
+	percent := (used * 100) / total
+	var color2 string
+	if percent >= 50 && percent < 90 {
+		color2 = "\033[33m"
+	} else if percent >= 90 {
+		color2 = "\033[31m"
+	} else {
+		color2 = "\033[32m"
+	}
+	fmt.Printf("%sSwap:%s %vMB / %vMB (%s%v%%%s)\n", color, reset, used, total, color2, int64(percent), reset)
 }
 
 func displayDisk(color string, reset string) {
@@ -200,7 +236,16 @@ func displayDisk(color string, reset string) {
 			fmt.Println("Error retrieving disk usage", err)
 			return
 		}
-		fmt.Printf("%sDisk:%s %s - %vGB / %vGB\n", color, reset, part.Mountpoint, usage.Used/1e9, usage.Total/1e9)
+		percent := (usage.Used * 100) / usage.Total
+		var color2 string
+		if percent >= 50 && percent < 90 {
+			color2 = "\033[33m"
+		} else if percent >= 90 {
+			color2 = "\033[31m"
+		} else {
+			color2 = "\033[32m"
+		}
+		fmt.Printf("%sDisk:%s %s - %vGB / %vGB (%s%v%%%s)\n", color, reset, part.Mountpoint, usage.Used/1e9, usage.Total/1e9, color2, percent, reset)
 	}
 }
 
@@ -223,10 +268,14 @@ func credits(color string, reset string) {
 
 func printAnsiColors(color string, reset string) {
 	fmt.Print("\n\n")
-	for i := 0; i < 16; i++ {
+	for i := 0; i < 8; i++ {
 		fmt.Printf("\x1b[48;5;%dm  ", i)
 	}
-	fmt.Print("\x1b[0m\n") // Reset
+	fmt.Print("\x1b[0m\n")
+	for i := 8; i < 16; i++ {
+		fmt.Printf("\x1b[48;5;%dm  ", i)
+	}
+	fmt.Print("\x1b[0m\n")
 }
 
 func displayBattery(color string, reset string) {
@@ -239,7 +288,15 @@ func displayBattery(color string, reset string) {
 	}
 	for _, bat := range batteries {
 		percent := int(bat.Current / bat.Full * 100)
-		fmt.Printf("%sBattery:%s %d%% %v\n", color, reset, percent, bat.State)
+		var color2 string
+		if percent <= 50 && percent > 20 {
+			color2 = "\033[33m"
+		} else if percent <= 20 {
+			color2 = "\033[31m"
+		} else {
+			color2 = "\033[32m"
+		}
+		fmt.Printf("%sBattery:%s %s%d%%%s %v\n", color, reset, color2, percent, reset, bat.State)
 	}
 }
 
@@ -248,4 +305,10 @@ func displayLocale(color string, reset string) {
 	if locale != "" {
 		fmt.Printf("%sLocale:%s %s\n", color, reset, locale)
 	}
+}
+
+func displayBootTime(color string, reset string) {
+	info, _ := host.Info()
+	time := time.Unix(int64(info.BootTime), 0)
+	fmt.Printf("%sBoot time:%s %v\n", color, reset, time)
 }
