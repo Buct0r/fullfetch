@@ -70,6 +70,15 @@ $ fullfetch
 ## Mac OS
 Head to the [release page](https://github.com/Buct0r/fullfetch/releases) and download the <code>fullfetch_portable_macos_(your_arch).zip</code> file. Extract it wherever you want and add the binary to your path variable. For now fullfetch is only available in its portable version.
 
+## Using Go
+Requirements:
+- Go(latest version)
+
+Just type:
+``` bash
+$ go install github.com/Buct0r/fullfetch@latest
+```
+
 # Building
 
 Requirements:
@@ -88,6 +97,14 @@ go build .
 
 # Customization
 You can customize pretty much every aspect of fullfetch. You can choose what to display, in wich order and what color should the parameters be displayed.
+
+By default, using the <code>go install</code> command, fullfetch uses an embedded version of the <code>config.json</code> file. If you want to customize evrything run the command:
+``` bash
+$ fullfetch --gen
+```  
+The file will be generated in the same directory as the binary, that as default is going to be <code>%GOPATH%\bin</code>
+
+Here there are all of the parameters you can customize: 
 
 Parameters:
 - art    
