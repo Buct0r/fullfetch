@@ -58,7 +58,7 @@ $ fullfetch
 ```
 
 #### rpm based (fedora, Red Hat)
-Download the <code>fullfetch-1.0-1.fc42.x86_64.rpm</code>(For now only avaible for x86). Head to the download folder with a terminal and type:
+Download the <code>fullfetch-(current version)-1.fc42.x86_64.rpm</code>(For now only avaible for x86). Head to the download folder with a terminal and type:
 ```bash
 $ sudo dnf install ~/(Downloaddir)/fullfetch-1.0-1.fc42.x86_64.rpm
 ```
