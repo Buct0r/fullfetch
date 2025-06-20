@@ -4,12 +4,13 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
-const version = "2.0.0"
+const version = "2.1.0"
 
 func main() {
-	var showVersion bool
+	var showVersion bool //aggiungere flag per vedere dove si ha generato il config
 	var generate bool
 	flag.BoolVar(&showVersion, "version", false, "print version and exit")
 	flag.BoolVar(&showVersion, "v", false, "print version and exit")
@@ -229,7 +230,12 @@ func main() {
 
 	if generate {
 		if path == "" {
-			newFile, err := os.Create("config.json")
+			configDir, _ := os.UserConfigDir()
+			configPath := filepath.Join(configDir, "fullfetch", "config.json")
+			if err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil {
+				panic(err)
+			}
+			newFile, err := os.Create(configPath)
 			if err != nil {
 				panic(err)
 			} else {
@@ -240,7 +246,7 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-			fmt.Println("Config file created succesfully")
+			fmt.Println("Config file created succesfully, you can now edit it at", configPath)
 		} else {
 			fmt.Println("Config file already exist, operation aborted :/")
 		}
@@ -252,7 +258,7 @@ func main() {
 	//color := "\033[38;5;208m"
 	//reset := "\033[0m"
 
-	loadConfig()
+	loadConfig(text)
 
 	fmt.Print("\n")
 

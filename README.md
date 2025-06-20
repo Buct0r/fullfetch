@@ -12,7 +12,7 @@ A completely customizable CLI system information tool made with Go
 </p><br><br>
 
 <p style="font-size: 1.1em;" align="center">
-fullfetch is a neofetch and fastfetch inspired CLI application for showing system
+fullfetch is a <a href="https://github.com/dylanaraps/neofetch">neofetch</a> and <a href="https://github.com/fastfetch-cli/fastfetch">fastfetch</a> inspired CLI application for showing system
 informations and fully customizable. The customization can be modified by editing
 the <code>config.json</code>.</p><br>
 

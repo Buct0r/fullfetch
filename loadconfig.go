@@ -15,16 +15,23 @@ type Config struct {
 	Colors  map[string]map[string]string `json:"colorSchemes"`
 }
 
-func loadConfig() {
-	file, err := os.Open(getConfigPath())
-	if err != nil {
-		fmt.Println("Error opening config file")
-	}
-	defer file.Close()
-
+func loadConfig(scheme string) {
+	path := getConfigPath()
 	var cfg Config
-	if err := json.NewDecoder(file).Decode(&cfg); err != nil {
-		panic(err)
+	if path == "" {
+		if err := json.Unmarshal([]byte(scheme), &cfg); err != nil {
+			panic(err)
+		}
+	} else {
+		file, err := os.Open(path)
+		if err != nil {
+			fmt.Println("Error opening config file") //cambiare e far utilizzare lo schema embedded
+		}
+		defer file.Close()
+
+		if err := json.NewDecoder(file).Decode(&cfg); err != nil {
+			panic(err)
+		}
 	}
 
 	selectedScheme := cfg.Schemes[cfg.Scheme]
