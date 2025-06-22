@@ -97,12 +97,12 @@ go build .
 
 # Customization
 You can customize pretty much every aspect of fullfetch. You can choose what to display, in wich order and what color should the parameters be displayed.
-
-By default, using the <code>go install</code> command, fullfetch uses an embedded version of the <code>config.json</code> file. If you want to customize evrything run the command:
+de>go install</code> command, fullfetch uses an embedded version of the <code>config.json</code> file. If you
+By default, using the <co want to customize evrything run the command:
 ``` bash
 $ fullfetch --gen
 ```  
-The file will be generated in the same directory as the binary, that as default is going to be <code>%GOPATH%\bin</code>
+The file will be generated in the config directory for the system.
 
 Here there are all of the parameters you can customize: 
 
