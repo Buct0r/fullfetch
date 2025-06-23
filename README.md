@@ -30,7 +30,7 @@ fullfetch displays the selected properties in the config file. You can fully sel
 <p align="center">fullfetch supports every system (in theory), and in case something is not supported open a GitHub issue.</p><br><br>
 
 # Installation
-<!--prova-->
+
 ## Windows
 ### Pre-Built installer
 Go to the [release page](https://github.com/Buct0r/fullfetch/releases) and download the <code>fullfetch_installer_(your_arch).exe</code>.
