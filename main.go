@@ -4,14 +4,20 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/user"
 	"path/filepath"
 )
 
-const version = "2.1.0"
+const version = "2.1.1" //updated on date 28/08/25
 
 func main() {
-	var showVersion bool //aggiungere flag per vedere dove si ha generato il config
+	var showVersion bool
 	var generate bool
+	var showConfig bool
+	var showHelp bool
+	flag.BoolVar(&showHelp, "h", false, "Show available commands")
+	flag.BoolVar(&showHelp, "help", false, "Show available commands")
+	flag.BoolVar(&showConfig, "c", false, "Show config file location")
 	flag.BoolVar(&showVersion, "version", false, "print version and exit")
 	flag.BoolVar(&showVersion, "v", false, "print version and exit")
 	flag.BoolVar(&generate, "gen", false, "generetase config file")
@@ -228,21 +234,34 @@ func main() {
     
 }`
 
+	// Generate config file
 	if generate {
+		userConfigDir := ""
+		if sudoUser := os.Getenv("SUDO_USER"); sudoUser != "" {
+			// if sudo take sudo user home directory
+			usr, err := user.Lookup(sudoUser)
+			if err == nil {
+				userConfigDir = filepath.Join(usr.HomeDir, ".config")
+			} else {
+				// fallback
+				userConfigDir, _ = os.UserConfigDir()
+			}
+		} else {
+			// not sudo, current home directory
+			userConfigDir, _ = os.UserConfigDir()
+		}
+		configPath := filepath.Join(userConfigDir, "fullfetch", "config.json")
+
 		if path == "" {
-			configDir, _ := os.UserConfigDir()
-			configPath := filepath.Join(configDir, "fullfetch", "config.json")
 			if err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil {
-				panic(err)
+				fmt.Println("Error, the creation of the config file requires sudo privileges. Run the command again with 'sudo fullfetch -gen'")
 			}
 			newFile, err := os.Create(configPath)
 			if err != nil {
 				panic(err)
-			} else {
-				defer newFile.Close()
 			}
+			defer newFile.Close()
 			_, err = newFile.WriteString(text + "\n")
-
 			if err != nil {
 				panic(err)
 			}
@@ -250,6 +269,51 @@ func main() {
 		} else {
 			fmt.Println("Config file already exist, operation aborted :/")
 		}
+		os.Exit(0)
+	}
+
+	/*
+	       if generate {
+	   		if path == "" {
+	   			configDir, _ := os.UserConfigDir()
+	   			configPath := filepath.Join(configDir, "fullfetch", "config.json")
+	   			if err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil {
+	   				panic(err)
+	   			}
+	   			newFile, err := os.Create(configPath)
+	   			if err != nil {
+	   				panic(err)
+	   			} else {
+	   				defer newFile.Close()
+	   			}
+	   			_, err = newFile.WriteString(text + "\n")
+
+	   			if err != nil {
+	   				panic(err)
+	   			}
+	   			fmt.Println("Config file created succesfully, you can now edit it at", configPath)
+	   		} else {
+	   			fmt.Println("Config file already exist, operation aborted :/")
+	   		}
+	   		os.Exit(0)
+	   	}*/
+
+	if showConfig {
+		if path != "" {
+			fmt.Println("The config file is located at: ", path)
+
+		} else {
+			fmt.Println("Config file doesn't exists yet. To create it, run 'fullfetch -gen' to create it")
+		}
+		os.Exit(0)
+	}
+
+	if showHelp {
+		fmt.Println("\nAvailable commands:")
+		fmt.Println("-h, --help     ->      Shows all available commands")
+		fmt.Println("-c             ->      Shows config file location")
+		fmt.Println("-gen           ->      Generate customizable config file")
+		fmt.Print("-v, --verision ->      Displays the current version\n\n")
 		os.Exit(0)
 	}
 

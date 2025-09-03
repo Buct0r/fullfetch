@@ -166,11 +166,11 @@ Next features:
 
 ## Log 2
 Pending ⚠️
-- Adding fullfetch to official packages repositories (apt, dnf, AUR ecc.) 
-- Adding fullfetch to winget repository 
-- tar.gz file for every os and arch 
-- adding fullfetch to homebrew 
-- adding at least one new feature
+- Adding fullfetch to official packages repositories (apt, dnf, AUR ecc.) ⚠️
+- Adding fullfetch to winget repository ⚠️
+- tar.gz file for every os and arch ✅
+- adding fullfetch to homebrew ⚠️
+- adding at least one new feature ✅
 
 # Conclusion
 Thank you for your support if you decide to install fullfetch. In the next days I will work to complete the majority of the points for the first log in the future updates section. <br>

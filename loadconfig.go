@@ -13,6 +13,9 @@ type Config struct {
 	Orders  map[string][]string          `json:"orders"`
 	Color   string                       `json:"colorScheme"`
 	Colors  map[string]map[string]string `json:"colorSchemes"`
+	//Version string                       `json:"version"`
+	Arts map[string][]string `json:"arts"`
+	Art  string              `json:"art"`
 }
 
 func loadConfig(scheme string) {
@@ -92,15 +95,34 @@ func loadConfig(scheme string) {
 	selectedOrder := cfg.Orders[cfg.Order]
 
 	selectedColors := cfg.Colors[cfg.Color]
+	//selectedArt := cfg.Arts[cfg.Art]
+
+	/*
+		selectedArt := cfg.Arts[cfg.Art]
+
+		version := cfg.Version
+
+		length := len(selectedOrder)
+
+		var count int = 0
+
+		for _, key := range selectedOrder {
+			if value && key == selectedOrder[key] {
+				count++
+			}
+		}
+
+	*/
 
 	for _, key := range selectedOrder {
 		if value, ok := selectedScheme[key]; ok && value {
 			if fn, ok := actions[key]; ok {
-				colorname := selectedColors[key]
+				colorname := selectedColors[key] //og
 				colorCode := colors[colorname]
 				reset := colors["Reset"]
 				fn(colorCode, reset)
 			}
 		}
 	}
+
 }

@@ -71,152 +71,6 @@ func displayArt() {
 	}
 
 	scheme := `{
-    "scheme": "all",
-    
-    "schemes" : {
-
-        "all": 
-        {
-        "art": true,
-        "title": true,
-        "os" : true,
-        "host": true,
-        "hostname"  : true,
-        "kernel" : true,
-        "uptime" : true,
-        "bootime": true,
-        "procs" : true,
-        "cpu"  : true,
-        "gpu" : true,
-        "memory" : true,
-        "swap": true,
-        "disk" : true,
-        "ip"   : true,
-        "colors" : true,
-        "locale" : true,
-        "battery" : true,
-        "credits" : true
-        },
-
-         "minimal": 
-         {
-            "art": false,
-            "title": true,
-            "os" : true,
-            "host": false,
-            "hostname"  : true,
-            "kernel" : false,
-            "cpu"  : true,
-            "uptime" : false,
-            "bootime": false,
-            "procs" : false,
-            "gpu" : true,
-            "memory" : true,
-            "swap": true,
-            "disk" : false,
-            "ip"   : false,
-            "colors" : false,
-            "locale" : false,
-            "battery" : true,
-            "credits" : false
-        },
-
-        "custom": 
-        {
-            "art": false,
-            "title": true,
-            "os" : true,
-            "hostname"  : true,
-            "kernel" : false,
-            "uptime" : false,
-            "bootime": true,
-            "procs" : false,
-            "cpu"  : true,
-            "gpu" : true,
-            "memory" : true,
-            "swap": true,
-            "disk" : true,
-            "ip"   : true,
-            "colors" : false,
-            "locale" : true,
-            "battery" : true,
-            "credits" : false
-        }
-    },
-
-    "order": "default",
-
-    "orders": {
-        "default": ["art", "title", "os","host", "hostname", "kernel", "uptime", "bootime", "procs", "cpu", "gpu", "memory", "swap", "disk", "ip", "battery", "locale", "colors"],
-        "custom" : ["os", "hostname", "kernel", "uptime", "cpu", "gpu", "memory", "disk", "ip", "colors"]
-    },
-
-    "colorScheme": "mono",
-
-    "colorSchemes": {
-
-        "default": 
-        {
-            "title" : "Purple",
-            "os": "White",
-            "host": "White",
-            "hostname":   "Red",
-		    "kernel":     "Red",
-		    "uptime":   "Green",
-            "bootime": "Green",
-            "procs": "Green",
-		    "cpu":  "Yellow",
-		    "gpu":    "Blue",
-		    "memory": "Magenta",
-            "swap": "Magenta",
-		    "disk":    "Cyan",
-		    "ip":    "Gray",
-            "battery": "Green",
-            "locale": "White",
-            "Reset":   "Reset"
-        },
-
-        "custom": 
-        {
-            "os": "Red",
-            "hostname":   "Reset",
-		    "kernel":     "Red",
-		    "uptime":   "Green",
-		    "cpu":  "Yellow",
-		    "gpu":    "Blue",
-		    "memory": "Magenta",
-		    "disk":    "Cyan",
-		    "ip":    "Gray",
-            "Reset":   "Reset"
-        },
-
-        "dark": 
-        {
-            "os": "White",
-            "Reset":   "Reset"
-        },
-
-        "mono" : 
-        {
-            "title" : "Orange",
-            "os": "Orange",
-            "host": "Orange",
-            "hostname":   "Orange",
-		    "kernel":     "Orange",
-		    "uptime":   "Orange",
-            "bootime": "Orange",
-            "procs": "Orange",
-		    "cpu":  "Orange",
-		    "gpu":    "Orange",
-		    "memory": "Orange",
-            "swap": "Orange",
-		    "disk":    "Orange",
-		    "ip":    "Orange",
-            "battery": "Orange",
-            "locale": "Orange",
-            "Reset":   "Reset"
-        }
-    },
 
     "art" : "default",
 
@@ -362,10 +216,19 @@ func displayUptime(color string, reset string) {
 	if uptime >= 3600 {
 		hours := uptime / 3600
 		minutes := (uptime % 3600) / 60
-		if minutes != 0 {
-			fmt.Printf("%sUptime:%s %d hours %d mins\n", color, reset, hours, minutes)
+		days := hours / 24
+		if days > 0 {
+			if hours%24 == 0 {
+				fmt.Printf("%sUptime:%s %d days %d mins\n", color, reset, days, minutes)
+			} else {
+				fmt.Printf("%sUptime:%s %d days %d hours %d mins\n", color, reset, days, hours%24, minutes)
+			}
 		} else {
-			fmt.Printf("%sUptime:%s %d hours\n", color, reset, hours)
+			if minutes != 0 {
+				fmt.Printf("%sUptime:%s %d hours %d mins\n", color, reset, hours, minutes)
+			} else {
+				fmt.Printf("%sUptime:%s %d hours\n", color, reset, hours)
+			}
 		}
 	} else {
 		fmt.Printf("%sUptime:%s %d mins\n", color, reset, uptime/60)
