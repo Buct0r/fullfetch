@@ -67,8 +67,31 @@ Reload the terminal and type
 $ fullfetch
 ```
 
+### Homebrew 
+Add the tap:
+```zsh
+brew tap Buct0r/fullfetch
+```
+and then install it: 
+```zsh
+brew install fullfetch
+```
+
 ## Mac OS
-Head to the [release page](https://github.com/Buct0r/fullfetch/releases) and download the <code>fullfetch_portable_macos_(your_arch).zip</code> file. Extract it wherever you want and add the binary to your path variable. For now fullfetch is only available in its portable version.
+
+### Homebrew (Recommended)
+Add the tap:
+```zsh
+brew tap Buct0r/fullfetch
+```
+and then install it: 
+```zsh
+brew install fullfetch
+```
+
+### Portable
+Head to the [release page](https://github.com/Buct0r/fullfetch/releases) and download the <code>fullfetch_portable_macos_(your_arch).zip</code> file. Extract it wherever you want and add the binary to your path variable.
+
 
 ## Using Go
 Requirements:
@@ -96,7 +119,7 @@ go build .
 ```
 
 # Customization
-You can customize pretty much every aspect of fullfetch. You can choose what to display, in which order and what color should the parameters be displayed.
+You can customize pretty much every aspect of fullfetch. You can choose what to display, in which order and what color should the parameters be displayed. With the
 <code>go install</code> command, fullfetch uses an embedded version of the <code>config.json</code> file. If you  want to customize everything run the command:
 ``` bash
 $ fullfetch --gen
@@ -169,11 +192,11 @@ Pending ⚠️
 - Adding fullfetch to official packages repositories (apt, dnf, AUR ecc.) ⚠️
 - Adding fullfetch to winget repository ⚠️
 - tar.gz file for every os and arch ✅
-- adding fullfetch to homebrew ⚠️
+- adding fullfetch to homebrew ✅
 - adding at least one new feature ✅
 
 # Conclusion
-Thank you for your support if you decide to install fullfetch. In the next days I will work to complete the majority of the points for the first log in the future updates section. <br>
+Thank you for your support if you decide to install fullfetch. For every idea or improvement feel free to open a pull request<br>
 Thanks to skesko for help during the testing phase. 
 
 Developed by Buct0r ❤️

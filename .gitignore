@@ -8,3 +8,5 @@ updates.md
 # Added by goreleaser init:
 dist/
 .goreleaser.yaml
+/homebrew-fullfetch/
+/manifests/
