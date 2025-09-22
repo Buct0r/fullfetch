@@ -40,7 +40,10 @@ Download the <code>fullfetch_portable_windows_(your_arch).zip</code> and extract
 
 ### Winget
 
-Coming soon...
+Open your terminal and type:
+```bash
+winget install fullfetch
+```
 
 
 ## Linux
@@ -190,7 +193,7 @@ Next features:
 ## Log 2
 Pending ⚠️
 - Adding fullfetch to official packages repositories (apt, dnf, AUR ecc.) ⚠️
-- Adding fullfetch to winget repository ⚠️
+- Adding fullfetch to winget repository ✅
 - tar.gz file for every os and arch ✅
 - adding fullfetch to homebrew ✅
 - adding at least one new feature ✅
