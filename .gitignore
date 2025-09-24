@@ -10,3 +10,7 @@ dist/
 .goreleaser.yaml
 /homebrew-fullfetch/
 /manifests/
+developpipeline.txt
+rsrc_windows_amd64.syso
+rsrc_windows_arm64.syso
+logo.ico

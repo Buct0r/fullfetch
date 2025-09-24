@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-const version = "2.1.1" //updated on date 28/08/25
+const version = "2.1.2" //updated on date 28/08/25
 
 func main() {
 	var showVersion bool

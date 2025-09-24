@@ -28,7 +28,7 @@ func loadConfig(scheme string) {
 	} else {
 		file, err := os.Open(path)
 		if err != nil {
-			fmt.Println("Error opening config file") //cambiare e far utilizzare lo schema embedded
+			fmt.Println("Error opening config file") //or using default config
 		}
 		defer file.Close()
 

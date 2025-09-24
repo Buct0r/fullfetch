@@ -37,7 +37,7 @@ func getConfigPath() string {
 	if runtime.GOOS == "windows" {
 		appdata := os.Getenv("APPDATA")
 		if appdata != "" {
-			configPath := filepath.Join(appdata, "fullfetch", "config.json")
+			configPath := filepath.Join(appdata, "fullfetch", "config.json") //Gets config folder for different OS
 			if _, err := os.Stat(configPath); err == nil {
 				return configPath
 			}
@@ -66,7 +66,7 @@ func showTitle(color string, reset string) {
 func displayArt() {
 
 	type Config struct {
-		Art  string              `json:"art"`
+		Art  string              `json:"art"` //da modfificare
 		Arts map[string][]string `json:"arts"`
 	}
 
@@ -248,7 +248,7 @@ func displayGpu(color string, reset string) {
 	var cmd *exec.Cmd
 	switch runtime.GOOS {
 	case "windows":
-		cmd = exec.Command("wmic", "path", "win32_VideoController", "get", "name")
+		cmd = exec.Command("wmic", "path", "win32_VideoController", "get", "name") //different methods to get GPU info on different OS
 	case "linux":
 		cmd = exec.Command("lspci")
 	case "darwin":
