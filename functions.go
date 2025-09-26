@@ -98,6 +98,28 @@ func displayArt() {
                 "           %@@@@@@@@@@@@@@@@%                                                   "
                                 
         ],
+		"defaultv2": [
+                "               @%%%%%%@@%                  %s",
+                "           %@@@@#**###%%@@@@%              %s",
+                "         #@%#***#######%%%%%@@             %s",
+                "         #@*#%%%%@@@@@@@@@@%%@             %s",
+                "         #@#%%=-:-======+*@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%%@@@@@@@@@@@@@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%@@@@@@@@@@@@@@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%%++=+******##@%%@             %s",
+                "         #@#%%@@@@@@@@@@@@@%%@             %s",
+                "         #@#%%=::-======+*@%%@             %s",
+                "         #@#%%+=-=+++++++*@%%@             %s",
+                "         #@#%@%%@@@@@@@@@@@%%@             %s",
+                "         #@@%#*#%%%%%%%%%%%%@@             %s",
+                "           %@@@@@@@@@@@@@@@@%              %s"
+        ],
         "biglogo": [
         " FFFFFFFFFFFFFFFFFFFFFF                  lllllll lllllll    ffffffffffffffff                           tttt                             hhhhhhh",             
         " F::::::::::::::::::::F                  l:::::l l:::::l   f::::::::::::::::f                       ttt:::t                             h:::::h",             
@@ -246,9 +268,10 @@ func displayCpu(color string, reset string) {
 
 func displayGpu(color string, reset string) {
 	var cmd *exec.Cmd
+	psCommand := "Get-CimInstance Win32_VideoController | Select-Object Name"
 	switch runtime.GOOS {
 	case "windows":
-		cmd = exec.Command("wmic", "path", "win32_VideoController", "get", "name") //different methods to get GPU info on different OS
+		cmd = exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", psCommand) //different methods to get GPU info on different OS
 	case "linux":
 		cmd = exec.Command("lspci")
 	case "darwin":

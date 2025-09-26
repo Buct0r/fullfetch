@@ -1,6 +1,5 @@
 {
-
-    "scheme": "all",
+   "scheme": "all",
     
     "schemes" : {
 
@@ -147,7 +146,7 @@
         }
     },
 
-    "art" : "defaultv1",
+    "art" : "defaultv2",
 
     "arts": {
         "defaultv1": [
