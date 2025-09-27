@@ -23,7 +23,7 @@ func loadConfig(scheme string) {
 	var cfg Config
 	if path == "" {
 		if err := json.Unmarshal([]byte(scheme), &cfg); err != nil {
-			panic(err)
+			fmt.Println("Error loading config, check your JSON syntax\nerror:", err)
 		}
 	} else {
 		file, err := os.Open(path)
@@ -33,7 +33,7 @@ func loadConfig(scheme string) {
 		defer file.Close()
 
 		if err := json.NewDecoder(file).Decode(&cfg); err != nil {
-			panic(err)
+			fmt.Println("Error loading config, check your JSON syntax\nerror:", err)
 		}
 	}
 

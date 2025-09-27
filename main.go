@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-const version = "2.1.2" //updated on date 28/08/25
+const version = "2.1.4" //updated on date 27/09/25
 
 func main() {
 	var showVersion bool
@@ -30,7 +30,7 @@ func main() {
 
 	path := getConfigPath()
 	text := `{
-    "scheme": "all",
+   "scheme": "all",
     
     "schemes" : {
 
@@ -177,10 +177,10 @@ func main() {
         }
     },
 
-    "art" : "default",
+    "art" : "defaultv1",
 
     "arts": {
-        "default": [
+        "defaultv1": [
                 "               @%%%%%%@@%                                                       ",
                 "           %@@@@#**###%%@@@@%                                                   ",
                 "         #@%#***#######%%%%%@@                                                  ",
@@ -202,6 +202,28 @@ func main() {
                 "         #@@%#*#%%%%%%%%%%%%@@                                                  ",
                 "           %@@@@@@@@@@@@@@@@%                                                   "
                                 
+        ],
+        "defaultv2": [
+                "               @%%%%%%@@%                  %s",
+                "           %@@@@#**###%%@@@@%              %s",
+                "         #@%#***#######%%%%%@@             %s",
+                "         #@*#%%%%@@@@@@@@@@%%@             %s",
+                "         #@#%%=-:-======+*@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%%@@@@@@@@@@@@@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%@@@@@@@@@@@@@@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%%=:.:======+*@%%@             %s",
+                "         #@#%%++=+******##@%%@             %s",
+                "         #@#%%@@@@@@@@@@@@@%%@             %s",
+                "         #@#%%=::-======+*@%%@             %s",
+                "         #@#%%+=-=+++++++*@%%@             %s",
+                "         #@#%@%%@@@@@@@@@@@%%@             %s",
+                "         #@@%#*#%%%%%%%%%%%%@@             %s",
+                "           %@@@@@@@@@@@@@@@@%              %s"
         ],
         "biglogo": [
         " FFFFFFFFFFFFFFFFFFFFFF                  lllllll lllllll    ffffffffffffffff                           tttt                             hhhhhhh",             
@@ -267,7 +289,7 @@ func main() {
 			}
 			fmt.Println("Config file created succesfully, you can now edit it at", configPath)
 		} else {
-			fmt.Println("Config file already exist, operation aborted :/")
+			fmt.Println("Config file already exist, you can edit it at:", path)
 		}
 		os.Exit(0)
 	}

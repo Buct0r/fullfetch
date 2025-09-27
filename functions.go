@@ -155,7 +155,7 @@ func displayArt() {
 	var cfg Config
 	if path == "" {
 		if err := json.Unmarshal([]byte(scheme), &cfg); err != nil {
-			panic(err)
+			fmt.Println("Error loading config, check your JSON syntax\nerror:", err)
 		}
 
 		selectedArt := cfg.Arts[cfg.Art]
@@ -168,12 +168,12 @@ func displayArt() {
 
 		file, err := os.Open(path)
 		if err != nil {
-			panic(err)
+			fmt.Println("Error opening config file") //or using default config
 		}
 		defer file.Close()
 
 		if err := json.NewDecoder(file).Decode(&cfg); err != nil {
-			panic(err)
+			fmt.Println("Error loading config, check your JSON syntax\nerror:", err)
 		}
 
 		selectedArt := cfg.Arts[cfg.Art]
@@ -359,7 +359,7 @@ func displayNetwork(color string, reset string) {
 	info, _ := host.Info()
 	ip, err := net.LookupHost(info.Hostname)
 	if err != nil {
-		panic(err)
+		fmt.Println("Error retrieving IP\nerror:", err)
 	}
 	for _, ip := range ip {
 		if strings.Count(ip, ".") == 3 {
