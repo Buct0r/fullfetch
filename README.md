@@ -93,7 +93,7 @@ brew install fullfetch
 ```
 
 ### Portable
-Head to the [release page](https://github.com/Buct0r/fullfetch/releases) and download the <code>fullfetch_portable_macos_(your_arch).zip</code> file. Extract it wherever you want and add the binary to your path variable.
+Head to the [release page](https://github.com/Buct0r/fullfetch/releases) and download the <code>fullfetch_Darwin_(your_arch).tar.gz</code> file, and install it.
 
 
 ## Using Go
