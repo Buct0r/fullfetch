@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-const version = "2.1.4" //updated on date 27/09/25
+const version = "2.1.5" //updated on date 04/11/25
 
 func main() {
 	var showVersion bool
@@ -110,7 +110,7 @@ func main() {
         "custom" : ["os", "hostname", "kernel", "uptime", "cpu", "gpu", "memory", "disk", "ip", "colors"]
     },
 
-    "colorScheme": "mono",
+    "colorScheme": "vivid",
 
     "colorSchemes": {
 
@@ -157,23 +157,63 @@ func main() {
 
         "mono" : 
         {
-            "title" : "Orange",
-            "os": "Orange",
-            "host": "Orange",
-            "hostname":   "Orange",
-		    "kernel":     "Orange",
-		    "uptime":   "Orange",
-            "bootime": "Orange",
-            "procs": "Orange",
-		    "cpu":  "Orange",
-		    "gpu":    "Orange",
-		    "memory": "Orange",
-            "swap": "Orange",
-		    "disk":    "Orange",
-		    "ip":    "Orange",
-            "battery": "Orange",
-            "locale": "Orange",
+            "title" : "BrightPink",
+            "os": "BrightPink",
+            "host": "BrightPink",
+            "hostname":   "BrightPink",
+		    "kernel":     "BrightPink",
+		    "uptime":   "BrightPink",
+            "bootime": "BrightPink",
+            "procs": "BrightPink",
+		    "cpu":  "BrightPink",
+		    "gpu":    "BrightPink",
+		    "memory": "BrightPink",
+            "swap": "BrightPink",
+		    "disk":    "BrightPink",
+		    "ip":    "BrightPink",
+            "battery": "BrightPink",
+            "locale": "BrightPink",
             "Reset":   "Reset"
+        },
+        "vivid": 
+        {
+            "title": "Rose",
+            "os": "DeepBlue",
+            "host": "Coral",
+            "hostname": "Coral",
+            "kernel": "Crimson",
+            "uptime": "Turquoise",
+            "bootime": "Cyan",
+            "procs": "Lime",
+            "cpu": "Mustard",
+            "gpu": "Purple",
+            "memory": "Lavender",
+            "swap": "Magenta",
+            "disk": "Amber",
+            "ip": "Slate",
+            "battery": "Green",
+            "locale": "White",
+            "Reset": "Reset"
+        },
+        "soft": 
+        {
+            "title": "Mint",
+            "os": "Olive",
+            "host": "Mint",
+            "hostname": "Lime",
+            "kernel": "Brown",
+            "uptime": "SeaGreen",
+            "bootime": "PaleGreen",
+            "procs": "PaleBlue",
+            "cpu": "Teal",
+            "gpu": "Sky",
+            "memory": "Sunset",
+            "swap": "Blush",
+            "disk": "Sand",
+            "ip": "Smoke",
+            "battery": "Peach",
+            "locale": "Cream",
+            "Reset": "Reset"
         }
     },
 

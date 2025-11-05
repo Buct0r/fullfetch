@@ -153,7 +153,7 @@ Parameters:
 
 You can also change the order of the displayed parameters by modifing the <code>"order"</code> section in the <code>config.json</code> file
 
-There are also a vast range of colors available:
+- Reset
 - Red
 - Green
 - Yellow
@@ -169,8 +169,33 @@ There are also a vast range of colors available:
 - Black
 - LightGray
 - DarkGray
+- LightRed
+- LightGreen
+- LightYellow
+- LightBlue
+- LightMagenta
+- LightCyan
+- LightOrange
+- LightPurple
+- LightPink
+- LightBrown
+- BrightPink
+- Rose
+- Coral
+- Teal
+- Mint
+- Lime
+- Sunset
+- Lavender
+- Slate
+- Mustard
+- DeepBlue
+- Amber
+- Crimson
+- Olive
+- Turquoise
+- HotPink
 <br>
-And all of the light versions of the colors.
 
 You can choose between different pre-made color schemes and also make your own
 

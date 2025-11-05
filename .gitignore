@@ -13,3 +13,4 @@ dist/
 developpipeline.txt
 *.syso
 logo.ico
+/fullfetch.wiki/
