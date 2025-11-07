@@ -53,7 +53,7 @@ Head to the [release page](https://github.com/Buct0r/fullfetch/releases) and dow
 #### Debian based:
 Download the <code>fullfetch_(your_arch).deb</code>. Head to the download folder with a terminal and type:
 ```bash
-$ sudo dpkg -i fullfetch_(your_arch).deb
+sudo dpkg -i fullfetch_(your_arch).deb
 ```
 Reload the terminal and type
 ```bash
@@ -63,7 +63,7 @@ $ fullfetch
 #### rpm based (fedora, Red Hat)
 Download the <code>fullfetch-(current version)-1.fc42.x86_64.rpm</code>(For now only available for x86). Head to the download folder with a terminal and type:
 ```bash
-$ sudo dnf install ~/(Downloaddir)/fullfetch-(current version)-1.fc42.x86_64.rpm
+sudo dnf install ~/(Downloaddir)/fullfetch-(current version)-1.fc42.x86_64.rpm
 ```
 Reload the terminal and type
 ```bash
@@ -102,7 +102,7 @@ Requirements:
 
 Just type:
 ``` bash
-$ go install github.com/Buct0r/fullfetch@latest
+go install github.com/Buct0r/fullfetch@latest
 ```
 
 # Building
@@ -125,7 +125,7 @@ go build .
 You can customize pretty much every aspect of fullfetch. You can choose what to display, in which order and what color should the parameters be displayed. With the
 <code>go install</code> command, fullfetch uses an embedded version of the <code>config.json</code> file. If you  want to customize everything run the command:
 ``` bash
-$ fullfetch --gen
+fullfetch --gen
 ```  
 
 By default, running the command <code>fullfetch --gen</code> will generate a <code>config.json</code> file in the config directory for the system. There you can customize. In case the file is set to read-only, just edit the file with sudo privilegies.
