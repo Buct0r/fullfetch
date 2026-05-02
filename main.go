@@ -332,7 +332,7 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-			defer newFile.Close()
+
 			defer func() {
 				if err := newFile.Close(); err != nil {
 					panic(err)

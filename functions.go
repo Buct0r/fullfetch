@@ -171,7 +171,7 @@ func displayArt() {
 		if err != nil {
 			fmt.Println("Error opening config file") //or using default config
 		}
-		defer file.Close()
+
 		defer func() {
 			if err := file.Close(); err != nil {
 				fmt.Println("Error closing config file:", err)
