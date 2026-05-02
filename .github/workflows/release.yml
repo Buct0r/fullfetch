@@ -36,7 +36,6 @@ jobs:
 
       - name: Download checksums
         run: |
-          RELEASE_ID=$(gh release list --repo ${{ github.repository }} --limit 1 --json id -q)
           gh release download ${{ steps.version.outputs.VERSION }} --repo ${{ github.repository }} --pattern "checksums.txt" --dir dist/
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
