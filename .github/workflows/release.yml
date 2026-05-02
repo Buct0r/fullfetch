@@ -1,0 +1,128 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.2'
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Download checksums
+        run: |
+          RELEASE_ID=$(gh release list --repo ${{ github.repository }} --limit 1 --json id -q)
+          gh release download ${{ steps.version.outputs.VERSION }} --repo ${{ github.repository }} --pattern "checksums.txt" --dir dist/
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Parse checksums and update Homebrew formula
+        id: checksums
+        run: |
+          # Extract checksums for each platform
+          DARWIN_ARM64_SHA=$(grep "Darwin_arm64" dist/checksums.txt | awk '{print $1}' | head -1)
+          DARWIN_X86_SHA=$(grep "Darwin_x86_64" dist/checksums.txt | awk '{print $1}' | head -1)
+          LINUX_ARM64_SHA=$(grep "Linux_arm64" dist/checksums.txt | awk '{print $1}' | head -1)
+          LINUX_X86_SHA=$(grep "Linux_x86_64" dist/checksums.txt | awk '{print $1}' | head -1)
+          
+          echo "DARWIN_ARM64_SHA=$DARWIN_ARM64_SHA" >> $GITHUB_OUTPUT
+          echo "DARWIN_X86_SHA=$DARWIN_X86_SHA" >> $GITHUB_OUTPUT
+          echo "LINUX_ARM64_SHA=$LINUX_ARM64_SHA" >> $GITHUB_OUTPUT
+          echo "LINUX_X86_SHA=$LINUX_X86_SHA" >> $GITHUB_OUTPUT
+          echo "VERSION=${{ steps.version.outputs.VERSION }}" >> $GITHUB_OUTPUT
+
+      - name: Checkout Homebrew repository
+        uses: actions/checkout@v4
+        with:
+          repository: Buct0r/homebrew-fullfetch
+          token: ${{ secrets.HOMEBREW_REPO_TOKEN }}
+          path: homebrew-fullfetch-repo
+
+      - name: Update Homebrew formula
+        run: |
+          VERSION=${{ steps.checksums.outputs.VERSION }}
+          VERSION_NUM=${VERSION#v}
+          
+          cat > homebrew-fullfetch-repo/Formula/fullfetch.rb << 'EOF'
+          class Fullfetch < Formula
+            desc "A CLI tool to fetch and display system information written in Go"
+            homepage "https://github.com/Buct0r/fullfetch"
+            license "MIT"
+            
+            version "${{ steps.checksums.outputs.VERSION }}"
+          
+            on_macos do
+              on_arm do
+                url "https://github.com/Buct0r/fullfetch/releases/download/${{ steps.checksums.outputs.VERSION }}/fullfetch_Darwin_arm64.tar.gz"
+                sha256 "${{ steps.checksums.outputs.DARWIN_ARM64_SHA }}"
+              end
+          
+              on_intel do
+                url "https://github.com/Buct0r/fullfetch/releases/download/${{ steps.checksums.outputs.VERSION }}/fullfetch_Darwin_x86_64.tar.gz"
+                sha256 "${{ steps.checksums.outputs.DARWIN_X86_SHA }}"
+              end
+            end
+          
+            on_linux do
+              on_arm do
+                url "https://github.com/Buct0r/fullfetch/releases/download/${{ steps.checksums.outputs.VERSION }}/fullfetch_Linux_arm64.tar.gz"
+                sha256 "${{ steps.checksums.outputs.LINUX_ARM64_SHA }}"
+              end
+              on_intel do
+                url "https://github.com/Buct0r/fullfetch/releases/download/${{ steps.checksums.outputs.VERSION }}/fullfetch_Linux_x86_64.tar.gz"
+                sha256 "${{ steps.checksums.outputs.LINUX_X86_SHA }}"
+              end
+            end
+          
+          
+            def install
+              bin.install "fullfetch"
+            end
+          
+            test do
+              system "#{bin}/fullfetch", "--version"
+            end
+          end
+          EOF
+
+      - name: Commit and push Homebrew formula update
+        working-directory: homebrew-fullfetch-repo
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add Formula/fullfetch.rb
+          git commit -m "chore: update fullfetch to ${{ steps.checksums.outputs.VERSION }}" || echo "No changes to commit"
+          git push origin main || echo "Push failed or no changes to push"
+        continue-on-error: true
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: dist/
+          retention-days: 30

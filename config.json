@@ -16,8 +16,11 @@
         "procs" : true,
         "cpu"  : true,
         "gpu" : true,
+        "mb" : true,
         "memory" : true,
+        "memorymodels" : true,
         "swap": true,
+        "packages": true,
         "disk" : true,
         "ip"   : true,
         "colors" : true,
@@ -41,6 +44,7 @@
             "gpu" : true,
             "memory" : true,
             "swap": true,
+            "packages": false,
             "disk" : false,
             "ip"   : false,
             "colors" : false,
@@ -63,6 +67,7 @@
             "gpu" : true,
             "memory" : true,
             "swap": true,
+            "packages": false,
             "disk" : true,
             "ip"   : true,
             "colors" : false,
@@ -75,11 +80,11 @@
     "order": "default",
 
     "orders": {
-        "default": ["art", "title", "os","host", "hostname", "kernel", "uptime", "bootime", "procs", "cpu", "gpu", "memory", "swap", "disk", "ip", "battery", "locale", "colors"],
-        "custom" : ["os", "hostname", "kernel", "uptime", "cpu", "gpu", "memory", "disk", "ip", "colors"]
+        "default": ["art", "title", "os","host", "hostname", "kernel", "uptime", "bootime", "procs", "cpu", "gpu", "mb", "memory", "memorymodels", "swap", "packages", "disk", "ip", "battery", "locale", "colors"],
+        "custom" : ["os", "hostname", "kernel", "uptime", "cpu", "gpu", "memory", "memorymodels", "disk", "ip", "colors"]
     },
 
-    "colorScheme": "vivid",
+    "colorScheme": "default",
 
     "colorSchemes": {
 
@@ -95,8 +100,11 @@
             "procs": "Green",
 		    "cpu":  "Yellow",
 		    "gpu":    "Blue",
+            "mb": "Cyan",
 		    "memory": "Magenta",
+            "memorymodels" : "Magenta",
             "swap": "Magenta",
+            "packages": "Yellow",
 		    "disk":    "Cyan",
 		    "ip":    "Gray",
             "battery": "Green",
@@ -126,22 +134,25 @@
 
         "mono" : 
         {
-            "title" : "BrightPink",
-            "os": "BrightPink",
-            "host": "BrightPink",
-            "hostname":   "BrightPink",
-		    "kernel":     "BrightPink",
-		    "uptime":   "BrightPink",
-            "bootime": "BrightPink",
-            "procs": "BrightPink",
-		    "cpu":  "BrightPink",
-		    "gpu":    "BrightPink",
-		    "memory": "BrightPink",
-            "swap": "BrightPink",
-		    "disk":    "BrightPink",
-		    "ip":    "BrightPink",
-            "battery": "BrightPink",
-            "locale": "BrightPink",
+            "title" : "Red",
+            "os": "Red",
+            "host": "Red",
+            "hostname":   "Red",
+		    "kernel":     "Red",
+		    "uptime":   "Red",
+            "bootime": "Red",
+            "procs": "Red",
+		    "cpu":  "Red",
+		    "gpu":    "Red",
+            "mb": "Red",
+		    "memory": "Red",
+            "memorymodels" : "Red",
+            "swap": "Red",
+		    "disk":    "Red",
+            "packages": "Red",
+		    "ip":    "Red",
+            "battery": "Red",
+            "locale": "Red",
             "Reset":   "Reset"
         },
         "vivid": 

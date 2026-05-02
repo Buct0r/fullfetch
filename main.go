@@ -8,8 +8,7 @@ import (
 	"path/filepath"
 )
 
-const version = "2.1.5" //updated on date 04/11/25
-
+const version = "2.2.0" //updated on date 02/05/26
 func main() {
 	var showVersion bool
 	var generate bool
@@ -20,7 +19,7 @@ func main() {
 	flag.BoolVar(&showConfig, "c", false, "Show config file location")
 	flag.BoolVar(&showVersion, "version", false, "print version and exit")
 	flag.BoolVar(&showVersion, "v", false, "print version and exit")
-	flag.BoolVar(&generate, "gen", false, "generetase config file")
+	flag.BoolVar(&generate, "gen", false, "generates config file")
 	flag.Parse()
 
 	if showVersion {
@@ -47,8 +46,11 @@ func main() {
         "procs" : true,
         "cpu"  : true,
         "gpu" : true,
+        "mb" : true,
         "memory" : true,
+        "memorymodels" : true,
         "swap": true,
+        "packages": true,
         "disk" : true,
         "ip"   : true,
         "colors" : true,
@@ -72,6 +74,7 @@ func main() {
             "gpu" : true,
             "memory" : true,
             "swap": true,
+            "packages": false,
             "disk" : false,
             "ip"   : false,
             "colors" : false,
@@ -94,6 +97,7 @@ func main() {
             "gpu" : true,
             "memory" : true,
             "swap": true,
+            "packages": false,
             "disk" : true,
             "ip"   : true,
             "colors" : false,
@@ -106,11 +110,11 @@ func main() {
     "order": "default",
 
     "orders": {
-        "default": ["art", "title", "os","host", "hostname", "kernel", "uptime", "bootime", "procs", "cpu", "gpu", "memory", "swap", "disk", "ip", "battery", "locale", "colors"],
-        "custom" : ["os", "hostname", "kernel", "uptime", "cpu", "gpu", "memory", "disk", "ip", "colors"]
+        "default": ["art", "title", "os","host", "hostname", "kernel", "uptime", "bootime", "procs", "cpu", "gpu", "mb", "memory", "memorymodels", "swap", "packages", "disk", "ip", "battery", "locale", "colors"],
+        "custom" : ["os", "hostname", "kernel", "uptime", "cpu", "gpu", "memory", "memorymodels", "disk", "ip", "colors"]
     },
 
-    "colorScheme": "vivid",
+    "colorScheme": "default",
 
     "colorSchemes": {
 
@@ -126,8 +130,11 @@ func main() {
             "procs": "Green",
 		    "cpu":  "Yellow",
 		    "gpu":    "Blue",
+            "mb": "Cyan",
 		    "memory": "Magenta",
+            "memorymodels" : "Magenta",
             "swap": "Magenta",
+            "packages": "Yellow",
 		    "disk":    "Cyan",
 		    "ip":    "Gray",
             "battery": "Green",
@@ -157,22 +164,25 @@ func main() {
 
         "mono" : 
         {
-            "title" : "BrightPink",
-            "os": "BrightPink",
-            "host": "BrightPink",
-            "hostname":   "BrightPink",
-		    "kernel":     "BrightPink",
-		    "uptime":   "BrightPink",
-            "bootime": "BrightPink",
-            "procs": "BrightPink",
-		    "cpu":  "BrightPink",
-		    "gpu":    "BrightPink",
-		    "memory": "BrightPink",
-            "swap": "BrightPink",
-		    "disk":    "BrightPink",
-		    "ip":    "BrightPink",
-            "battery": "BrightPink",
-            "locale": "BrightPink",
+            "title" : "Red",
+            "os": "Red",
+            "host": "Red",
+            "hostname":   "Red",
+		    "kernel":     "Red",
+		    "uptime":   "Red",
+            "bootime": "Red",
+            "procs": "Red",
+		    "cpu":  "Red",
+		    "gpu":    "Red",
+            "mb": "Red",
+		    "memory": "Red",
+            "memorymodels" : "Red",
+            "swap": "Red",
+		    "disk":    "Red",
+            "packages": "Red",
+		    "ip":    "Red",
+            "battery": "Red",
+            "locale": "Red",
             "Reset":   "Reset"
         },
         "vivid": 

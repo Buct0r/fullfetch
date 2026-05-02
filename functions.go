@@ -9,6 +9,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -259,11 +260,12 @@ func displayUptime(color string, reset string) {
 
 func displayCpu(color string, reset string) {
 	cpuInfo, _ := cpu.Info()
-	model := cpuInfo[0].ModelName
+	model := strings.TrimSpace(cpuInfo[0].ModelName)
 	numCores, _ := cpu.Counts(false)
 	GHZ := float64(cpuInfo[0].Mhz) / 1000
 	//usage, _ := cpu.Percent(time.Second, false)  <-- makes the program run too slowly
-	fmt.Printf("%sCPU:%s (%v) %v @ %.2fGHz\n", color, reset, numCores, model, GHZ) //usage[0]
+	output := fmt.Sprintf("%sCPU:%s (%v) %v @ %.2fGHz\n", color, reset, numCores, model, GHZ)
+	fmt.Print(output) //usage[0]
 }
 
 func displayGpu(color string, reset string) {
@@ -417,4 +419,219 @@ func displayBootTime(color string, reset string) {
 	info, _ := host.Info()
 	time := time.Unix(int64(info.BootTime), 0)
 	fmt.Printf("%sBoot time:%s %v\n", color, reset, time)
+}
+
+func displayPackages(color string, reset string) {
+	var managers []string
+	var totalCount int
+
+	switch runtime.GOOS {
+	case "linux":
+		if _, err := exec.LookPath("dpkg"); err == nil {
+			out, err := exec.Command("sh", "-c", "dpkg-query -W -f='${Status}' | grep -c 'install ok installed'").Output()
+			if err == nil {
+				count, _ := strconv.Atoi(strings.TrimSpace(string(out)))
+				if count > 0 {
+					managers = append(managers, fmt.Sprintf("%d (dpkg)", count))
+					totalCount += count
+				}
+			}
+		}
+		if _, err := exec.LookPath("rpm"); err == nil {
+			out, err := exec.Command("sh", "-c", "rpm -qa | wc -l").Output()
+			if err == nil {
+				count, _ := strconv.Atoi(strings.TrimSpace(string(out)))
+				if count > 0 {
+					managers = append(managers, fmt.Sprintf("%d (rpm)", count))
+					totalCount += count
+				}
+			}
+		}
+		if _, err := exec.LookPath("pacman"); err == nil {
+			out, err := exec.Command("sh", "-c", "pacman -Qq | wc -l").Output()
+			if err == nil {
+				count, _ := strconv.Atoi(strings.TrimSpace(string(out)))
+				if count > 0 {
+					managers = append(managers, fmt.Sprintf("%d (pacman)", count))
+					totalCount += count
+				}
+			}
+		}
+		if _, err := exec.LookPath("apk"); err == nil {
+			out, err := exec.Command("sh", "-c", "apk info | wc -l").Output()
+			if err == nil {
+				count, _ := strconv.Atoi(strings.TrimSpace(string(out)))
+				if count > 0 {
+					managers = append(managers, fmt.Sprintf("%d (apk)", count))
+					totalCount += count
+				}
+			}
+		}
+		if _, err := exec.LookPath("flatpak"); err == nil {
+			out, err := exec.Command("sh", "-c", "flatpak list --app | wc -l").Output()
+			if err == nil {
+				count, _ := strconv.Atoi(strings.TrimSpace(string(out)))
+				if count > 0 {
+					managers = append(managers, fmt.Sprintf("%d (flatpak)", count))
+					totalCount += count
+				}
+			}
+		}
+		if _, err := exec.LookPath("snap"); err == nil {
+			out, err := exec.Command("sh", "-c", "snap list --all | wc -l").Output()
+			if err == nil {
+				count, _ := strconv.Atoi(strings.TrimSpace(string(out)))
+				if count > 1 {
+					count--
+					managers = append(managers, fmt.Sprintf("%d (snap)", count))
+					totalCount += count
+				}
+			}
+		}
+
+	case "darwin":
+		if _, err := exec.LookPath("brew"); err == nil {
+			out, err := exec.Command("sh", "-c", "brew list --formula | wc -l").Output()
+			if err == nil {
+				count, _ := strconv.Atoi(strings.TrimSpace(string(out)))
+				if count > 0 {
+					managers = append(managers, fmt.Sprintf("%d (brew)", count))
+					totalCount += count
+				}
+			}
+			out, err = exec.Command("sh", "-c", "brew list --cask | wc -l").Output()
+			if err == nil {
+				count, _ := strconv.Atoi(strings.TrimSpace(string(out)))
+				if count > 0 {
+					managers = append(managers, fmt.Sprintf("%d (cask)", count))
+					totalCount += count
+				}
+			}
+		}
+		if _, err := exec.LookPath("port"); err == nil {
+			out, err := exec.Command("sh", "-c", "port installed | wc -l").Output()
+			if err == nil {
+				count, _ := strconv.Atoi(strings.TrimSpace(string(out)))
+				if count > 0 {
+					managers = append(managers, fmt.Sprintf("%d (macports)", count))
+					totalCount += count
+				}
+			}
+		}
+
+	case "windows":
+		if _, err := exec.LookPath("winget"); err == nil {
+			out, err := exec.Command("winget", "list").Output()
+			if err == nil {
+				lines := strings.Split(string(out), "\n")
+				count := 0
+				for _, line := range lines {
+					trimmed := strings.TrimSpace(line)
+					if trimmed != "" && !strings.HasPrefix(trimmed, "Name") && !strings.HasPrefix(trimmed, "-") && !strings.HasPrefix(trimmed, "Arp") {
+						count++
+					}
+				}
+				if count > 0 {
+					managers = append(managers, fmt.Sprintf("%d (winget)", count))
+					totalCount += count
+				}
+			}
+		}
+		if _, err := exec.LookPath("choco"); err == nil {
+			out, err := exec.Command("choco", "list", "-l", "--limit-output").Output()
+			if err == nil {
+				lines := strings.Split(string(out), "\n")
+				if len(lines) > 0 {
+					count := len(lines)
+					managers = append(managers, fmt.Sprintf("%d (choco)", count))
+					totalCount += count
+				}
+			}
+		}
+	}
+
+	if len(managers) == 0 {
+		return
+	}
+
+	if len(managers) == 1 {
+		fmt.Printf("%sPackages:%s %s\n", color, reset, managers[0])
+	} else {
+		fmt.Printf("%sPackages:%s %d (%s)\n", color, reset, totalCount, strings.Join(managers, ", "))
+	}
+}
+
+func displayMB(color string, reset string) {
+
+	switch runtime.GOOS {
+	case "linux":
+		data, err := os.ReadFile("/sys/devices/virtual/dmi/id/board_vendor")
+		if err != nil {
+			fmt.Println("Error retrieving motherboard vendor\nerror:", err)
+			return
+		}
+		data2, err2 := os.ReadFile("/sys/devices/virtual/dmi/id/board_name")
+		if err2 != nil {
+			fmt.Println("Error retrieving motherboard name\nerror:", err2)
+			return
+		}
+		output := fmt.Sprintf("%sMotherboard:%s %s %s\n", color, reset, strings.TrimSpace(string(data)), strings.TrimSpace(string(data2)))
+		fmt.Print(output)
+	case "darwin":
+		out, err := exec.Command("sysctl", "-n", "hw.model").Output()
+		if err == nil {
+			fmt.Printf("%sMotherboard:%s %s\n", color, reset, strings.TrimSpace(string(out)))
+		}
+	case "windows":
+		manufacturer, err := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", "Get-CimInstance Win32_BaseBoard | Select-Object -ExpandProperty  Manufacturer").Output()
+		if err != nil {
+			manufacturer = []byte("Unknown")
+		}
+		product, err := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", "Get-CimInstance Win32_BaseBoard | Select-Object -ExpandProperty  Product").Output()
+		if err != nil {
+			product = []byte("Unknown")
+		}
+		output := fmt.Sprintf("%sMotherboard:%s %s %s\n", color, reset, strings.TrimSpace(string(manufacturer)), strings.TrimSpace(string(product)))
+
+		fmt.Print(output)
+
+	}
+
+}
+
+func displayRamModel(color string, reset string) {
+	switch runtime.GOOS {
+	case "windows":
+		out, err := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command",
+			"Get-CimInstance Win32_PhysicalMemory | ForEach-Object { \"$($_.Manufacturer) $($_.PartNumber) $($_.Speed)MHz $($_.Capacity / 1GB)GB\" }").Output()
+		if err != nil {
+			fmt.Println("Error retrieving RAM info")
+			return
+		}
+		lines := strings.Split(strings.TrimSpace(string(out)), "\n")
+		for i, line := range lines {
+			if strings.TrimSpace(line) != "" && i > 0 {
+				fmt.Printf("%sRAM specs:%s %s\n", color, reset, strings.TrimSpace(line))
+			}
+		}
+
+	case "linux":
+		out, err := exec.Command("sh", "-c", "dmidecode -t memory 2>/dev/null | grep 'Part Number\\|Manufacturer\\|Speed'").Output()
+		if err != nil {
+			return
+		}
+		fmt.Printf("%sRAM specs:%s %s\n", color, reset, strings.TrimSpace(string(out)))
+
+	case "darwin":
+		out, err := exec.Command("system_profiler", "SPMemoryDataType").Output()
+		if err != nil {
+			return
+		}
+		lines := strings.Split(string(out), "\n")
+		for _, line := range lines {
+			if strings.Contains(line, "Type:") || strings.Contains(line, "Size:") || strings.Contains(line, "Speed:") {
+				fmt.Printf("%sRAM specs:%s %s\n", color, reset, strings.TrimSpace(line))
+			}
+		}
+	}
 }

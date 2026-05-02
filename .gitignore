@@ -14,3 +14,7 @@ developpipeline.txt
 *.syso
 logo.ico
 /fullfetch.wiki/
+workflow.md
+AGENTS.md
+fullfetch.exe
+HOMEBREW_SETUP.md
