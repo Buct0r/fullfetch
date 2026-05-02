@@ -172,6 +172,11 @@ func displayArt() {
 			fmt.Println("Error opening config file") //or using default config
 		}
 		defer file.Close()
+		defer func() {
+			if err := file.Close(); err != nil {
+				fmt.Println("Error closing config file:", err)
+			}
+		}()
 
 		if err := json.NewDecoder(file).Decode(&cfg); err != nil {
 			fmt.Println("Error loading config, check your JSON syntax\nerror:", err)

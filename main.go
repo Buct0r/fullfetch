@@ -333,6 +333,11 @@ func main() {
 				panic(err)
 			}
 			defer newFile.Close()
+			defer func() {
+				if err := newFile.Close(); err != nil {
+					panic(err)
+				}
+			}()
 			_, err = newFile.WriteString(text + "\n")
 			if err != nil {
 				panic(err)
