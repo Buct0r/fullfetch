@@ -36,7 +36,7 @@ jobs:
 
       - name: Download checksums
         run: |
-          gh release download ${{ steps.version.outputs.VERSION }} --repo ${{ github.repository }} --pattern "checksums.txt" --dir dist/
+          gh release download ${{ steps.version.outputs.VERSION }} --repo ${{ github.repository }} --pattern "checksums.txt" --dir dist/ --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
