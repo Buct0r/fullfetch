@@ -142,7 +142,11 @@ Parameters:
 - processes    
 - cpu    
 - gpu  
+- motherboard
 - memory   
+- memory info
+- swap
+- packages
 - disk   
 - ip      
 - colors  
@@ -216,12 +220,23 @@ Next features:
 - adding fullfetch to homebrew ❌
 
 ## Log 2
-Pending ⚠️
-- Adding fullfetch to official packages repositories (apt, dnf, AUR ecc.) ⚠️
+Not fully completed ❌
+- Adding fullfetch to official packages repositories (apt, dnf, AUR ecc.) ❌
 - Adding fullfetch to winget repository ✅
 - tar.gz file for every os and arch ✅
 - adding fullfetch to homebrew ✅
 - adding at least one new feature ✅
+
+## Log 3 
+Completed ✅
+- Adding motherboard info ✅
+- Adding RAM info ✅
+- Adding packages count ✅
+
+## Log 4
+Pending ⚠️
+- General code optimization
+
 
 # Conclusion
 Thank you for your support if you decide to install fullfetch. For every idea or improvement feel free to open a pull request<br>
